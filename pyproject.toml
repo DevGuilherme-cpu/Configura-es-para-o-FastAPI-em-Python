@@ -1,0 +1,66 @@
+[project]
+# Mude este nome e a descrição para o nome do seu novo projeto.
+name = "meu-projeto-fastapi"
+version = "0.1.0"
+description = "Template base para projetos FastAPI"
+authors = [
+    {name = "Guilherme", email = "guilandin01@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.12,<4.0"
+dependencies = [
+    "fastapi[standard]"
+]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+# Aqui ficam as ferramentas que você só usa enquanto está programando (Testes, formatadores, etc).
+[dependency-groups]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "taskipy",
+    "ruff",
+    "typos"
+]
+
+# Configurações do Ruff (O seu "fiscal" de formatação de código).
+[tool.ruff]
+line-length = 79
+extend-exclude = ['migrations']
+
+# I = (Isort): Checagem de ordenação de imports em ordem alfabética.
+# F = (Pyflakes): Procura por alguns erros em relação a boas práticas de código.
+# E = (Erros pycodestyle): Erros de estilo de código.
+# W = (Avisos pycodestyle): Avisos de coisas não recomendadas no estilo de código.
+# PL = (Pylint): Como o F, também procura por erros em relação a boas práticas de código.
+# PT = (flake8-pytest): Checagem de boas práticas do Pytest
+
+[tool.ruff.lint]
+preview = true
+select = ['I', 'F', 'E', 'W', 'PL', 'PT']
+
+[tool.ruff.format]
+preview = true
+quote-style = 'single'
+
+# Configurações do Pytest (O seu testador automático).
+[tool.pytest]
+pythonpath = ['.']
+addopts = ['-p', 'no:warnings', '--cov=app', '--cov-context=test']
+
+# Configurações do Taskipy (Os seus atalhos mágicos de terminal).
+[tool.taskipy.tasks]
+lint = 'ruff check'
+pre_format = 'ruff check --fix'
+format = 'ruff format'
+run = 'fastapi dev app.py' # Atalho para rodar o servidor. Se seu arquivo estiver dentro de uma pasta, mude para 'fastapi dev nome_da_pasta/app.py'.
+pre_test = 'task lint'
+test = 'pytest -s -x -vv'
+post_test = 'coverage html --show-contexts'
+
+# Configurações do Typos (Ignora arquivos markdown na hora de corrigir inglês).
+[tool.typos.files]
+extend-exclude = ["*.md"]
